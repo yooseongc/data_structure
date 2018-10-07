@@ -2,4 +2,4 @@
 var List = require('./List');
 
 
-console.dir(new List().toString());
+console.dir(List.prototype);
