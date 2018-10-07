@@ -34,3 +34,22 @@ console.log(`end : ${names.getElement()}`);
 console.log();
 console.log('----------------------------------------');
 console.log();
+
+console.log('\n\n\n');
+console.log('----------------------------------------');
+console.log('                  test2                 ');
+console.log('----------------------------------------');
+console.log();
+
+var iter = names.iterator();
+console.log(iter);
+
+while (iter.hasNext()) {
+    console.log(iter.next());
+}
+
+console.log();
+console.log('----------------------------------------');
+console.log();
+
+

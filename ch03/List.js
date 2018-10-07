@@ -6,6 +6,7 @@ var List = function() {
     this.pos = 0;
 }
 
+
 Object.assign(List.prototype, {
     
     constructor: List,
@@ -73,6 +74,24 @@ Object.assign(List.prototype, {
     contains: function(element) {
         return (this.find(element) != -1);
     },
+
+    iterator: function() {
+        var list = this;
+        list.front();
+        var end = true;
+        return { 
+            hasNext: function() {
+                return end;
+            },
+            next: function() {
+                var elem = list.getElement();
+                var currPos = list.currPos();
+                list.next(); 
+                if (currPos == list.currPos()) end = false;
+                return elem;
+            }
+        };
+    }
 });
 
 module.exports = List;
