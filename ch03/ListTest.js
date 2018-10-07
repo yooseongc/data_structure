@@ -47,6 +47,7 @@ console.log(iter);
 while (iter.hasNext()) {
     console.log(iter.next());
 }
+// iter.next();  --> it will occur error.
 
 console.log();
 console.log('----------------------------------------');

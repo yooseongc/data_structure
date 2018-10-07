@@ -77,17 +77,17 @@ Object.assign(List.prototype, {
 
     iterator: function() {
         var list = this;
+        var pos = 0;
         list.front();
-        var end = true;
         return { 
             hasNext: function() {
-                return end;
+                return (pos <= list.length() - 1);
             },
             next: function() {
+                if (!this.hasNext()) throw new Error('iterator end.');
+                list.moveTo(pos);
                 var elem = list.getElement();
-                var currPos = list.currPos();
-                list.next(); 
-                if (currPos == list.currPos()) end = false;
+                pos++;
                 return elem;
             }
         };
