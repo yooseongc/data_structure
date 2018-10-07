@@ -1,6 +1,15 @@
 
+/**
+ * @author yooseongc
+ * @since '2018-10-07'
+ * @todo  split it into List interface and 
+ *        ArrayList implementation.
+ * 
+ * Array-based List ADT Implementation.
+ * which has no 'MAXIMUM SIZE' and 'DEFAULT SIZE'
+ * 'NOT THREAD SAFE VERSION'
+ */
 var List = function() {
-
     this.listSize = 0;
     this.pos = 0;
     this._dataStore = [];
