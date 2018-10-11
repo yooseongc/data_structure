@@ -78,7 +78,6 @@ Object.assign(List.prototype, {
     iterator: function() {
         var list = this;
         var pos = 0;
-        list.front();
         return { 
             hasNext: function() {
                 return (pos <= list.length() - 1);

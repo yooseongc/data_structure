@@ -35,18 +35,18 @@ ArrayList.prototype = Object.assign(Object.create(List.prototype), {
      */
     find: function(element) {
         // implementation 1
-        // for (var i = 0; i < this._dataStore.length; i++) {
-        //     if (this._dataStore[i] == element) {
-        //         return i;
-        //     }
-        // }
-        // return -1;
-
-        // implementation 2
-        this._dataStore.forEach(function (value, index) {
-            if (value == element) return index;
-        });
+        for (var i = 0; i < this._dataStore.length; i++) {
+            if (this._dataStore[i] == element) {
+                return i;
+            }
+        }
         return -1;
+
+        // implementation 2  --> wrong!!!
+        // this._dataStore.forEach(function (value, index) {
+        //     if (value == element) return index;
+        // });
+        // return -1;
     },
 
     /**

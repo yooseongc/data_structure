@@ -1,0 +1,149 @@
+device, decomposed = 0
+erase
+x_verts = [-1, 1, 1, -1]
+y_verts = [-1, -1, 1, 1]
+usersym, x_verts, y_verts, /fill
+
+r=bytarr(256)
+g=bytarr(256)
+b=bytarr(256)
+FOR k = 0, 255 DO BEGIN
+    IF (k LT 126) THEN BEGIN
+    r(k) = k*2
+    g(k) = k*2
+    b(k) = 255
+    ENDIF
+    IF (k GE 126) THEN BEGIN
+    r(k) = 255
+    g(k) = -2*(k+2)+255
+    b(k) = -2*(k+2)+255
+    ENDIF
+    TVLCT, r(k), g(k), b(k), k
+ENDFOR
+
+
+TVLCT, 0, 0, 0, 255 ; black
+TVLCT, 255, 255, 255, 253 ; white
+TVLCT, 150, 150, 150, 254 ; grey
+
+!p.background = 253
+!p.font = 1
+
+
+prad = ['EV_1KM_Emissive']
+ploc = ['Latitude', 'Longitude', 'SensorZenith']
+
+nprad = N_ELEMENTS(prad)
+nploc = N_ELEMENTS(ploc)
+
+path = '/data1/class16/chokh/'
+
+ATfile = FINDFILE(path + 'MOD021KM.A2015053.0340.006.2015053134722.hdf')
+BTfile = FINDFILE(path + 'MOD021KM.A2015053.1305.006.2015054015007.hdf')
+CTfile = FINDFILE(path + 'MOD021KM.A2015054.0245.006.2015054141103.hdf')
+DTfile = FINDFILE(path + 'MOD04_L2.A2015053.0200.006.2015055001453.hdf')
+ETfile = FINDFILE(path + 'MOD04_L2.A2015053.0340.006.2015055001820.hdf')
+FTfile = FINDFILE(path + 'MOD04_L2.A2015054.0245.006.2015055004535.hdf')
+
+ATnf = n_elements(ATfile)
+BTnf = n_elements(BTfile)
+CTnf = n_elements(CTfile)
+DTnf = n_elements(DTfile)
+ETnf = n_elements(ETfile)
+FTnf = n_elements(FTfile)
+
+
+FOR iii = 0 , ATnf -1 DO BEGIN
+
+    print, ATfile(iii)
+    fileid = HDF_OPEN(ATfile[iii], /READ)
+    sdsfileid = HDF_SD_START(ATfile[iii], /READ)
+
+    FOR ii = 0, nploc -1 DO BEGIN
+
+        print, ploc[ii]
+        index = HDF_SD_NAMETOINDEX(sdsfileid, ploc[ii])
+        varid = HDF_SD_SELECT(sdsfileid, index)
+
+        HDF_SD_GETDATA, varid, var
+
+        IF (ploc[ii] EQ 'Longitude') THEN BEGIN
+           lon = var
+        ENDIF
+        IF (ploc[ii] EQ 'Latitude') THEN BEGIN
+           lat = var
+        ENDIF
+        IF (ploc[ii] EQ 'SensorZenith') THEN BEGIN
+           sz = var*0.01
+        ENDIF
+    ENDFOR
+
+    FOR ii = 0, nprad -1 DO BEGIN
+
+        print, prad[ii]
+        index = HDF_SD_NAMETOINDEX(sdsfileid, prad[ii])
+        varid = HDF_SD_SELECT(sdsfileid, index)
+
+        HDF_SD_GETDATA, varid, var
+
+        IF (prad[ii] EQ 'EV_1KM_Emissive') THEN BEGIN
+
+        HDF_SD_ATTRINFO, varid, 5, DATA=ev_scale
+        HDF_SD_ATTRINFO, varid, 6, DATA=ev_offset
+
+        rad = var
+
+        ENDIF
+    ENDFOR
+
+    HDF_SD_END, sdsfileid
+
+ENDFOR
+
+
+FOR i = 0, 15 DO BEGIN
+    rad(*,*,i) = ev_scale(i)*(rad(*,*,i)- ev_offset(i))
+ENDFOR
+
+nl = n_elements(rad(*,0,0))
+nr = n_elements(rad(0,*,0))
+nv = n_elements(rad(0,0,*))
+
+BT = FLTARR(nl,nr,nv)
+BT11 = AQUA_BRIGHT(rad(*,*,10),31,1)
+BT12 = AQUA_BRIGHT(rad(*,*,11),32,1)
+BTD = FLTARR(nl,nr)
+BTD = BT11 - BT12
+
+
+ID1 = where((lon GT 110) AND (lon LT 140) AND (lat GT 30) AND (lat LT 50))
+
+lon_min = 110
+lon_max = 140
+lat_min = 30
+lat_max = 50
+
+min_BTD=-2.0
+max_BTD=2.0
+
+WINDOW, 0, TITLE='Plot', XPOS=0, YPOS=100, XSIZE=800, YSIZE=600
+MAP_SET, 35, 125, /GRID, /CONTINENT, LIMIT=[lat_min, lon_min, lat_max, lon_max], /ISOTROPIC $
+         , XMARGIN=10, YMARGIN=10, COLOR=255, title='BDT', charsize=2.5, $
+         position=[0.1,0.1,0.85,0.85], /noerase, /advance
+MAP_GRID, /HORIZON, LATDEL=5, LONDEL=5, /GRID, /LABEL, LATLAB=0, LONLAB=0, CLIP_TEXT=0 $
+        , CHARSIZE=1.5, /BOX_AXES
+
+
+IMAGE1=BYTSCL(BTD(ID1), MIN=min_BTD, MAX=max_BTD, TOP=250)
+PLOTS, lon(ID1), lat(ID1), COLOR=IMAGE1, PSYM=8, SYMSIZE=3.0
+COLORBAR, /VERTICAL, POSITION=[0.9,0.09,0.92,0.93] $
+        , COLOR=255, NCOLORS=250, CHARSIZE=2, FORMAT='(F5.1)' $
+        , MINRANGE=min_BTD, MAXRANGE=max_BTD, DIVISIONS=10 $
+        , TOP=250
+MAP_CONTINENTS, /COAST, COLOR=255, THICK=1
+
+
+;WRITE_PNG, 'BDT1.png', TVRD(TRUE=1)
+
+
+END
