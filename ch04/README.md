@@ -47,3 +47,29 @@
 | __PUSH__          | func   | 스택의 top에 새 요소를 추가 |
 | __POP__           | func   | 스택의 top에 있는 요소를 반환 및 제거 |
 | __PEEK__          | func   | 스택의 top에 있는 요소를 반환 |
+
+---
+
+## 사용 사례
+
+재귀 알고리즘
+재귀적으로 함수를 호출해야 하는 경우에 임시 데이터를 스택에 넣어준다.  
+재귀함수를 빠져 나와 `퇴각 검색(backtrack)`을 할 때는 스택에 넣어 두었던 임시 데이터를 빼 줘야 한다.  
+스택은 이런 일련의 행위를 `직관적으로 가능하게` 해 준다.  
+또한 스택은 재귀 알고리즘을 `반복적 형태(iterative)`를 통해서 구현할 수 있게 해준다.  
+
+- 웹 브라우저 방문기록 (뒤로가기)
+- 실행 취소 (undo)
+- 역순 문자열 만들기
+- 수식의 괄호 검사 (연산자 우선순위 표현을 위한 괄호 검사)
+  - Ex) 올바른 괄호 문자열(VPS, Valid Parenthesis String) 판단하기
+- 후위 표기법 계산
+  
+Ref) https://gmlwjd9405.github.io/2018/08/03/data-structure-stack.html
+
+--
+
+## 재귀 vs 꼬리재귀
+
+Ref1) http://ledgku.tistory.com/37?category=669017  
+Ref2) http://bozeury.tistory.com/entry/%EA%BC%AC%EB%A6%AC-%EC%9E%AC%EA%B7%80-%EC%B5%9C%EC%A0%81%ED%99%94Tail-Recursion  

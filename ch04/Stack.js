@@ -39,6 +39,9 @@ Object.assign(Stack.prototype, {
         return this._dataStore.pop();
     },
 
+    isEmpty: function() {
+        return (this.top === 0);
+    }
     
 });
 

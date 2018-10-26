@@ -1,6 +1,13 @@
 var fs = require('fs');
 var performance = require('perf_hooks').performance;
 
+function printWithTime(name, callback) {
+    var start = performance.now();
+    var result = callback();
+    var end = performance.now();
+    console.log(name, result,  `ellapsed time : ${ (end - start) } ms.`);
+}
+
 /**
  * wrap result to a test template.
  * @param {*} name 
@@ -20,12 +27,11 @@ function testTemplate(name, showResult, checkTime, testCallback) {
 ${ testCallback() }
 
 -------------------------------------------------------
-
 `);
     var end = performance.now();
     if (checkTime) {
         console.log(
-            `ellapsed time : ${ (end - start) } ms.`
+            `ellapsed time : ${ (end - start) } ms.\n\n`
         );
     }
 
@@ -35,7 +41,7 @@ ${ testCallback() }
         var end = performance.now();
         if (checkTime) {
             console.log(
-                `ellapsed time : ${ (end - start) } ms.`
+                `ellapsed time : ${ (end - start) } ms.\n\n`
             );
         }
     }
@@ -51,4 +57,4 @@ function readFile(filepath) {
 }
 
 
-module.exports = { testTemplate, readFile };
+module.exports = { testTemplate, readFile, printWithTime };
