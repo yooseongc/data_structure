@@ -41,6 +41,19 @@ Object.assign(Stack.prototype, {
 
     isEmpty: function() {
         return (this.top === 0);
+    },
+
+    clone: function(target) {
+        var cloned = new Stack();
+        var tlen = target.length();
+        for (var i = 0; i < tlen; i++) {
+            cloned.push(target._dataStore[i]);
+        }
+        return cloned;
+    },
+
+    display: function() {
+        return JSON.stringify(this._dataStore);
     }
     
 });

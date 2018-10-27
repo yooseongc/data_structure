@@ -24,7 +24,8 @@ function factorial2(n) {
 // 복잡도 : n-1
 function factorial3(n) {
     var product = 1;
-    for (;n > 1;) {
+    for (;n > 
+        1;) {
         product *= n--;
     }
     return product;
