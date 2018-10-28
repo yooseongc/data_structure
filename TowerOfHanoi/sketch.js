@@ -32,11 +32,22 @@ function setup() {
     disks[5] = new Disk(37.5);   disks[5].setXY(width/2 - towerspacing*0 - disks[5].w/2, height/2 + towerheight - disks[5].h);
     disks[6] = new Disk(25);     disks[6].setXY(width/2 - towerspacing*0 - disks[6].w/2, height/2 + towerheight - disks[6].h);
     disks[7] = new Disk(12.5);   disks[7].setXY(width/2 - towerspacing*0 - disks[7].w/2, height/2 + towerheight - disks[7].h);
+    // disks[8] = new Disk(12.5);   disks[8].setXY(width/2 - towerspacing*0 - disks[8].w/2, height/2 + towerheight - disks[7].h);
+    // disks[9] = new Disk(12.5);   disks[9].setXY(width/2 - towerspacing*0 - disks[9].w/2, height/2 + towerheight - disks[7].h);
+    // disks[10] = new Disk(12.5);   disks[10].setXY(width/2 - towerspacing*0 - disks[10].w/2, height/2 + towerheight - disks[7].h);
 
     towers[0].disks.pushAll(disks);
 
     // play and create moves;
-    isEnd = hanoi(disks.length, towers[0], towers[1], towers[2]);  
+    var p1 = new Date();
+    moves = [];
+    isEnd = hanoi(disks.length, towers[0], towers[1], towers[2]);
+    var p2 = new Date();
+    moves = [];
+    isEnd = hanoiWithStack(disks.length, towers[0], towers[1], towers[2]);
+    var p3 = new Date();
+    console.log('RECURSIVE', `ellapsed time : ${ (p2 - p1)} ms`);
+    console.log('NON-RECURSIVE', `ellapsed time : ${ (p3 - p2)} ms`);
     frameRate(20);
 }
 
@@ -48,6 +59,41 @@ function hanoi(height, fromT, toT, withT) {
     } else {
         return true;
     }
+}
+
+// I CAN'T UNDERSTAND THIS ALGORITHM...
+function hanoiWithStack(height, fromT, toT, withT) {
+    var stack = new Stack();
+    var done = false;
+    while (!done) {
+        while (height > 1) {  
+            stack.push(toT);
+            stack.push(withT);
+            stack.push(fromT);
+            stack.push(height);
+            height--;
+            // switch toT and withT
+            stack.push(toT);
+            toT = withT;
+            withT = stack.pop();     
+        }
+        moves.push({ from: fromT, to: toT });      // move the biggest disk to toT
+        if (!stack.isEmpty()) {
+            height = stack.pop();
+            fromT = stack.pop();
+            withT = stack.pop();
+            toT = stack.pop();
+            moves.push({ from: fromT, to: toT });  // move the biggest disk to toT
+            height--;
+            // switch fromT and withT
+            stack.push(fromT);
+            fromT = withT;
+            withT = stack.pop();
+        } else {
+            done = true;
+        }
+    }
+
 }
 
 function move(towerFrom, towerTo) {
