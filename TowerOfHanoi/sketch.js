@@ -46,8 +46,11 @@ function setup() {
     moves = [];
     isEnd = hanoiWithStack(disks.length, towers[0], towers[1], towers[2]);
     var p3 = new Date();
-    console.log('RECURSIVE', `ellapsed time : ${ (p2 - p1)} ms`);
-    console.log('NON-RECURSIVE', `ellapsed time : ${ (p3 - p2)} ms`);
+    isEnd = hanoiWithStack2(disks.length, towers[0], towers[1], towers[2]);
+    var p4 = new Date();
+    console.log('RECURSIVE',      `ellapsed time : ${ (p2 - p1)} ms`);
+    console.log('NON-RECURSIVE',  `ellapsed time : ${ (p3 - p2)} ms`);
+    console.log('NON-RECURSIVE2', `ellapsed time : ${ (p4 - p3)} ms`);
     frameRate(20);
 }
 
@@ -61,7 +64,7 @@ function hanoi(height, fromT, toT, withT) {
     }
 }
 
-// I CAN'T UNDERSTAND THIS ALGORITHM...
+
 function hanoiWithStack(height, fromT, toT, withT) {
     var stack = new Stack();
     var done = false;
@@ -93,7 +96,39 @@ function hanoiWithStack(height, fromT, toT, withT) {
             done = true;
         }
     }
+}
 
+/*
+ * 
+1. Calculate the total number of moves required i.e. "pow(2, n)
+   - 1" here n is number of disks.
+2. If number of disks (i.e. n) is even then interchange destination 
+   pole and auxiliary pole.
+3. for i = 1 to total number of moves:
+     if i%3 == 1:
+    legal movement of top disk between source pole and 
+        destination pole
+     if i%3 == 2:
+    legal movement top disk between source pole and 
+        auxiliary pole    
+     if i%3 == 0:
+        legal movement top disk between auxiliary pole 
+        and destination pole 
+
+    REF) https://www.geeksforgeeks.org/iterative-tower-of-hanoi/ 
+ */
+function hanoiWithStack2(height, fromT, toT, withT) {
+    var totalMoves = Math.floor(Math.pow(2, height) - 1);
+    if (height % 2 == 1) {
+        var temp = toT;
+        toT = withT;
+        withT = temp;
+    }
+    for (var i = 1; i <= totalMoves; i++) {
+        if      (i % 3 === 1) moves.push({ from: fromT, to: toT   });
+        else if (i % 3 === 2) moves.push({ from: fromT, to: withT });
+        else                  moves.push({ from: withT, to: toT   });
+    }
 }
 
 function move(towerFrom, towerTo) {
