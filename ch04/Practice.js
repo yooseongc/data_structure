@@ -106,7 +106,7 @@ TestUtil.printWithTime('test4', () => evalParenthesesBalance('( ( ( ( ) ) ) )'))
  */
 
 
- function evalPostfixFormula(pf_formula) {
+function evalPostfixFormula(pf_formula) {
     var OPERATORS = {
         PLUS: '+',
         MINUS: '-',
@@ -152,7 +152,7 @@ TestUtil.printWithTime('test4', () => evalParenthesesBalance('( ( ( ( ) ) ) )'))
         }
     }
     return operand_stack.pop();
- }
+}
 
 console.log('\n\n  Problem2 \n\n');
 
