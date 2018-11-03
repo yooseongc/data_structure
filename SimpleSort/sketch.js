@@ -17,6 +17,11 @@ function setup() {
     console.log(values);
 }
 
+/**
+ *  Bubble Sort
+ *  complexity : length * (length -1)
+ * @param {*} values 
+ */
 function simpleSort(values) {
     for (var i = 0; i < values.length-1; i++) {
         var prev = values[i];

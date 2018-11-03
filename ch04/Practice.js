@@ -82,6 +82,7 @@ function evalParenthesesBalance(formula) {
     console.log();
  }
 
+
  console.log('\n\n  Problem1 \n\n');
 
 TestUtil.printWithTime('test1', () => evalParenthesesBalance('( ( ) ( ( ( ) ) ( ) ) )'));
@@ -140,7 +141,8 @@ function evalPostfixFormula(pf_formula) {
         
     }
 
-    var divided = pf_formula.split(' ');
+    var divided = pf_formula.trim().split(' ');
+    // [ 3, 5, + , 4, 2, + , * ]
     var operand_stack = new Stack();
     for (var i = 0; i < divided.length; i++) {
         var next = divided[i];

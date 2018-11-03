@@ -10,7 +10,7 @@ server.listen(8080, () => {
 });
 
 server.on('request', (request, response) => {
-
+    console.log(request.url);
     var filePath = '.' + request.url;
     if (filePath == './')  filePath = './index.html';
 
