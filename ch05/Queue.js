@@ -39,7 +39,6 @@ function Queue(type = 'l', maxSize = 10) {
      * check this queue is empty or not.
      */
     this.isEmpty = function() {
-        // 환형 큐의 경우 
         if (this.type === 'l') return this.front === this.end;
         else                   return this.front === this.end;
     }
@@ -50,6 +49,22 @@ function Queue(type = 'l', maxSize = 10) {
     this.isFull = function() {
         if (this.type === 'l') return this.end === this.maxSize;
         else                   return ( (this.front % this.maxSize) === ((this.end + 1) % this.maxSize) );
+    }
+
+    /**
+     * get front item.  [not tested]
+     */
+    this.peekFront = function() {
+        if (this.type === 'l') return this._dataStore[this.front];
+        else                   return this._dataStore[(this.front+1) % this.maxSize];
+    }
+
+    /**
+     * get end item.  [not tested]
+     */
+    this.peekEnd = function() {
+        if (this.type === 'l') return this._dataStore[this.end-1];
+        else                   return this._dataStore[this.end % this.maxSize];
     }
 
     /**
@@ -105,5 +120,6 @@ function Queue(type = 'l', maxSize = 10) {
 
 }
 
+var window = window;
 if (!window) module.exports = Queue;
 
