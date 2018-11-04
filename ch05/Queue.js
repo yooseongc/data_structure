@@ -1,9 +1,4 @@
 
-// ========================================================
-// TODO : TEST this object!!!!
-//        I didn't check this object at all...
-// ========================================================
-
 /**
  * Basic Queue Implementation 
  * with Javascript Array.
@@ -13,15 +8,16 @@
  */
 function Queue(type = 'l', maxSize = 10) {
     
-    if      (type === 'l') this._type = 'Linear Queue';
-    else if (type === 'c') this._type = 'Circular Queue';
+    if      (type === 'l') this.type = 'l';
+    else if (type === 'c') this.type = 'c';
     else throw new Error('Illegal argument : type should be "l"(linear) or "c"(circular)');
 
     // initial value for front = end = 0;
     this.front = 0;
     this.end = 0;
-    this.maxSize = (type === 'l') ? maxSize : maxSize + 1;
-    this._dataStore = (type === 'l') ? [] : [null];
+    this.maxSize = maxSize;
+    this._dataStore = [];
+    if (type === 'c') this._dataStore[0] = null;
     
     /*
     우선 10의 크기를 가진 큐를 사용하기 위해서는 11만큼의 배열 사이즈를 할당해야 한다. 
@@ -53,7 +49,7 @@ function Queue(type = 'l', maxSize = 10) {
      */
     this.isFull = function() {
         if (this.type === 'l') return this.end === this.maxSize;
-        else                   return ( (this.front % this.size()) === ((this.end + 1) % this.size()) );
+        else                   return ( (this.front % this.maxSize) === ((this.end + 1) % this.maxSize) );
     }
 
     /**
@@ -66,41 +62,45 @@ function Queue(type = 'l', maxSize = 10) {
             this._dataStore[this.end] = item;
             this.end += 1;
         } else {
-            this._dataStore[(this.end+1) % this.maxSize] = item;
-            this.end = (this.end + 1) % this.maxSize;
+            this.end = (this.end + 1) % (this.maxSize);
+            this._dataStore[this.end] = item;
         }
     }
 
     this.dequeue = function() {
         if (this.isEmpty()) throw new Error('Underflow occurred.');
         if (this.type === 'l') {
-            var out = this._dataStore[this.front];
-            this._data[this.front] = undefined;
-            this.front += 1;
+            // implementation 1
+            // var out = this._dataStore[this.front];
+            // this._dataStore[this.front] = null;
+            // this.front += 1;
+            
+            // implementation 2  : more general.
+            var out = this._dataStore.shift();
+            this.end = this.end - 1;
             return out;
         } else {
-            var out = this._dataStore[(this.front+1) % this.maxSize];
-            this._data[(this.front+1) % this.maxSize] = undefined;
             this.front = (this.front + 1) % this.maxSize;
+            var out = this._dataStore[this.front % this.maxSize];
+            this._dataStore[this.front % this.maxSize] = null;
+            
             return out;
         }
     }
 
     this.toString = function() {
-        if (this.type === 'l') return JSON.stringify(this._dataStore);
-        else {
-            let copy = this._dataStore.slice();
-            JSON.stringify(copy.splice(1, this.size()));
-        }
+        return JSON.stringify(this._dataStore);
     }
 
     this.show = function() {
-        if (this.type === 'l') console.log(this._dataStore);
-        else {
-            let copy = this._dataStore.slice();
-            console.log(copy.splice(1, this.size()));
-        }
+        console.log(this._dataStore, 'front : ' + this.front, 'end : ' + this.end);
+    }
+
+    this.debug = function() {
+
     }
 
 }
+
+module.exports = Queue;
 
