@@ -1,0 +1,56 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Queue Visualization</title>
+        <link rel="stylesheet" href="index.css">
+        <script src="https://d3js.org/d3.v5.min.js"></script>
+
+        <style>
+            textarea {
+                height: auto;
+                font-size: 14px;
+                border: 1;
+                margin: 0;
+                padding: 20px !important;
+                line-height: 14px;
+                font-family: Consolas,Liberation Mono,Courier,monospace;
+                overflow: visible;
+                transition: all 0.5s ease-in-out;
+            }
+        </style>
+    </head>
+
+    <body>
+        
+        <div class="masthead">
+            <div class="container">
+                <h3 class="masthead-title">Queue Visualization Example</h3>
+            </div>
+        </div>
+
+        <div style="width: 60%">
+
+            <h4 style="text-align: center">Queue Visualization using d3.js</h4>
+            <br><br>
+            <div id="workspace" style="margin-left:30%;min-height:200px;min-width:650px"></div>
+
+            <div style="margin-left:30%">
+                <button id="run" onclick="run();" class="run">Run</button>
+            </div>
+            <div style="margin-left:30%">
+                <textarea id="code" cols="80" rows="20"></textarea>
+            </div>
+            
+            <pre><code>
+                    &Tab;&Tab;&Tab;&Tab;&Tab;    사용법:
+                    &Tab;&Tab;&Tab;&Tab;&Tab;    q.clear();           ---> Clear Queue
+                    &Tab;&Tab;&Tab;&Tab;&Tab;    q.enqueue(num);      ---> Enqueue [NUMBER]
+                    &Tab;&Tab;&Tab;&Tab;&Tab;    q.dequeue();         ---> dequeue
+                    &Tab;&Tab;&Tab;&Tab;&Tab;    q.show();            ---> show queue information in console
+            </code></pre>
+        </div>
+        <script src="./Queue.js" type="text/javascript"></script>
+        <script src="./index.js" type="text/javascript"></script>
+    </body>
+</html>

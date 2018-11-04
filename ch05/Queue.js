@@ -93,14 +93,17 @@ function Queue(type = 'l', maxSize = 10) {
     }
 
     this.show = function() {
-        console.log(this._dataStore, 'front : ' + this.front, 'end : ' + this.end);
+        console.log(this._dataStore, 'type : ' + this.type,
+            'front : ' + this.front, 'end : ' + this.end, 'msize : ' + this.maxSize);
     }
 
-    this.debug = function() {
-
+    this.clear = function() {
+        this.front = 0;
+        this.end = 0;
+        this._dataStore = [];
     }
 
 }
 
-module.exports = Queue;
+if (!window) module.exports = Queue;
 
