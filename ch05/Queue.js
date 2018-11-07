@@ -18,7 +18,11 @@ function Queue(type = 'l', maxSize = 10) {
     this.maxSize = maxSize;
     this._dataStore = [];
     if (type === 'c') this._dataStore[0] = null;
-    
+  
+}
+
+Queue.prototype = Object.assign(Object.create(Queue.prototype), {
+
     /*
     우선 10의 크기를 가진 큐를 사용하기 위해서는 11만큼의 배열 사이즈를 할당해야 한다. 
     큐의 첫 번째 인덱스는 항상 비워두어야 하기 때문이다. 첫 번째 인덱스를 비워놓음으로서 
@@ -31,47 +35,47 @@ function Queue(type = 'l', maxSize = 10) {
     /**
      * get total size of this queue.
      */
-    this.size = function() {
+    size: function() {
         return (this.type === 'l') ? this._dataStore.length : this._dataStore.length - 1;
-    }
+    },
 
     /**
      * check this queue is empty or not.
      */
-    this.isEmpty = function() {
+    isEmpty: function() {
         if (this.type === 'l') return this.front === this.end;
         else                   return this.front === this.end;
-    }
+    },
 
     /**
      * check this queue is full.
      */
-    this.isFull = function() {
+    isFull: function() {
         if (this.type === 'l') return this.end === this.maxSize;
         else                   return ( (this.front % this.maxSize) === ((this.end + 1) % this.maxSize) );
-    }
+    },
 
     /**
      * get front item.  [not tested]
      */
-    this.peekFront = function() {
+    peekFront: function() {
         if (this.type === 'l') return this._dataStore[this.front];
         else                   return this._dataStore[(this.front+1) % this.maxSize];
-    }
+    },
 
     /**
      * get end item.  [not tested]
      */
-    this.peekEnd = function() {
+    peekEnd: function() {
         if (this.type === 'l') return this._dataStore[this.end-1];
         else                   return this._dataStore[this.end % this.maxSize];
-    }
+    },
 
     /**
      * push item into this queue. (to end).
      * and then, this end pointer increase by 1.
      */
-    this.enqueue = function(item) {
+    enqueue: function(item) {
         if (this.isFull()) throw new Error('Overflow occurred.');
         if (this.type === 'l') {
             this._dataStore[this.end] = item;
@@ -80,9 +84,9 @@ function Queue(type = 'l', maxSize = 10) {
             this.end = (this.end + 1) % (this.maxSize);
             this._dataStore[this.end] = item;
         }
-    }
+    },
 
-    this.dequeue = function() {
+    dequeue: function() {
         if (this.isEmpty()) throw new Error('Underflow occurred.');
         if (this.type === 'l') {
             // implementation 1
@@ -101,24 +105,24 @@ function Queue(type = 'l', maxSize = 10) {
             
             return out;
         }
-    }
+    },
 
-    this.toString = function() {
+    toString: function() {
         return JSON.stringify(this._dataStore);
-    }
+    },
 
-    this.show = function() {
+    show: function() {
         console.log(this._dataStore, 'type : ' + this.type,
             'front : ' + this.front, 'end : ' + this.end, 'msize : ' + this.maxSize);
-    }
+    },
 
-    this.clear = function() {
+    clear: function() {
         this.front = 0;
         this.end = 0;
         this._dataStore = [];
     }
 
-}
+});
 
 var window = window;
 if (!window) module.exports = Queue;
