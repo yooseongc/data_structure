@@ -1,0 +1,62 @@
+
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    background: url('http://i.imgur.com/Eor57Ae.jpg') no-repeat fixed center center;
+    background-size: cover;
+    font-family: Montserrat;
+}
+
+.container {
+    position: relative;
+    width: 800px;
+    height: 600px;
+    padding: 20px;
+    background: #fff;
+    border-radius: 5px;
+    border-top: 5px solid #ff656c;
+    margin: 50px auto;
+}
+
+.center {
+    font-size: 2em;
+    margin: 10px auto;
+    text-align: center;
+}
+
+canvas {
+    background: #eee;
+    display: block;
+    margin: 0 auto;
+}
+
+#gameboard {
+    width: 720px;
+    height: 480px;
+}
+
+#start {
+    width: 100px;
+    height: 50px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 100;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    background: #656cff;
+    box-sizing: border-box;
+    border-radius: 20px;
+    text-shadow: 0 20px 20px rgba(0, 0, 0, 0.2);
+}
+
+.hidden {
+    display: none !important;
+}
