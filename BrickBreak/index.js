@@ -2,6 +2,7 @@
 var canvas = document.getElementById('gameboard');
 var game = new BrickBreakGame(canvas);
 
+// create gamestart, gameend event
 var gameStartEvent = document.createEvent('Event');
 var gameEndEvent   = document.createEvent('Event');
 gameStartEvent.initEvent('gamestart', true, true);
@@ -19,9 +20,22 @@ window.addEventListener('gameend', e => {
     startBtn.className = '';
 }, false);
 
+// start btn
 var startBtn = document.getElementById("start");
 startBtn.onclick = function() {
     window.dispatchEvent(gameStartEvent);
-    setTimeout(() => window.dispatchEvent(gameEndEvent), 3000);
 }
 
+
+// keyboard listener
+document.addEventListener('keydown', (e) => {
+    if (e.keyCode === 39 || e.keyCode === 37) {
+        game.onKeyPressed(e);
+    }
+}, false);
+
+document.addEventListener('keyup', (e) => {
+    if (e.keyCode === 39 || e.keyCode === 37) {
+        game.onKeyReleased(e);
+    }
+}, false);
